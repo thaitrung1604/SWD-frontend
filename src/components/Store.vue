@@ -53,7 +53,10 @@ export default {
       getStores() {
         axios({
           method: "GET",
-          url: `http://localhost:8080/api/v1/stores`
+          url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/stores`
+          ,headers: {
+            "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
+          }
         }).then(
           result => {
             this.tableData = result.data.content;
@@ -70,7 +73,10 @@ export default {
         const self = this;
         axios({
           method: "GET",
-          url: `http://localhost:8080/api/v1/stores/${this.searchValue}`
+          url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/stores/${this.searchValue}`
+          ,headers: {
+            "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
+          }
         }).then(
           result => {
             let tableTmp = [];

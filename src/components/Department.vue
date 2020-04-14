@@ -53,7 +53,10 @@ export default {
       getDepartments() {
         axios({
           method: 'GET',
-          url: `https://assetmanagementapi.herokuapp.com/api/v1/departments`
+          url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/departments`
+          ,headers: {
+            "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
+          }
         }).then(
           result => {
             this.tableData = result.data.content;
@@ -70,7 +73,10 @@ export default {
         const self = this;
         axios({
           method: 'GET',
-          url: `https://assetmanagementapi.herokuapp.com/api/v1/departments/${this.searchValue}`
+          url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/departments/${this.searchValue}`,
+          headers: {
+            "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
+          }
         }).then(
           result => {
             let tableTmp = [];

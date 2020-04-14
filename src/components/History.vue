@@ -54,7 +54,10 @@ export default {
         const self = this;
         axios({
           method: "GET",
-          url: "http://localhost:8080/api/v1/histories"
+          url: "https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/histories"
+          ,headers: {
+            "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
+          }
         }).then(
           result => {
             self.tableData = result.data.content;
@@ -82,7 +85,10 @@ export default {
         
         axios({
           method: "GET",
-          url: `http://localhost:8080/api/v1/histories?page=0&size=10&sortBy=date&sortOrder=DESC&searchBy=date&searchValue=${this.searchDate}`
+          url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/histories?page=0&size=10&sortBy=date&sortOrder=DESC&searchBy=date&searchValue=${this.searchDate}`
+          ,headers: {
+            "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
+          }
         }).then(
           result => {
             self.tableData = result.data.content;

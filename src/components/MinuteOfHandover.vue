@@ -57,7 +57,10 @@ export default {
           const self = this;
         axios({
           method: "GET",
-          url: `http://localhost:8080/api/v1/minuteofhandovers`
+          url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/minuteofhandovers`
+          ,headers: {
+            "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
+          }
         }).then(
           result => {
             self.tableData = result.data.content;
@@ -80,7 +83,10 @@ export default {
         const self = this;
         axios({
           method: "GET",
-          url: `http://localhost:8080/api/v1/minuteofhandovers/${this.searchValue}`
+          url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/minuteofhandovers/${this.searchValue}`
+          ,headers: {
+            "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
+          }
         }).then(
           result => {
             let tableTmp = [];

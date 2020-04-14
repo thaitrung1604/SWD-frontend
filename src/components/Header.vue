@@ -2,7 +2,7 @@
     <el-container>
         <el-row class="logo-container">
             <el-col class="logo" span="8">
-                <img src="https://imgur.com/2jii8Qo"/>
+                <img src="https://i.imgur.com/xUAH2KP.png"/>
             </el-col>
         </el-row>
     </el-container>

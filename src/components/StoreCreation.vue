@@ -91,8 +91,11 @@ export default {
             if (this.validate()) {
                 axios({
                     method: 'POST',
-                    url: `http://localhost:8080/api/v1/admin/stores`,
+                    url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/admin/stores`,
                     data: this.newStore,
+                    headers: {
+                        "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
+                    }
                 }).then(
                     result => {
                         if (result.data) {

@@ -105,7 +105,7 @@ export default {
       const self = this;
        axios({
         method: "GET",
-        url: `https://assetmanagementapi.herokuapp.com/api/v1/assets/${self.searchValue}`,
+        url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/assets/${self.searchValue}`,
         headers: {
           "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
         }

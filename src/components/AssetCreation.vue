@@ -221,7 +221,10 @@ export default {
         getAssetTypes() {
             axios({
                 method: 'GET',
-                url: `http://localhost:8080/api/v1/types`
+                url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/types`
+                ,headers: {
+                    "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
+                }
                 }).then(
                 result => {
                     this.typeList = result.data;
@@ -235,7 +238,10 @@ export default {
         getSuppliers() {
             axios({
                 method: 'GET',
-                url: `http://localhost:8080/api/v1/suppliers`
+                url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/suppliers`
+                ,headers: {
+                    "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
+                }
             }).then(
                 result => {
                     this.supplierList = result.data.content;
@@ -248,7 +254,10 @@ export default {
         getStatus() {
             axios({
                 method: 'GET',
-                url: `http://localhost:8080/api/v1/statuses`
+                url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/statuses`
+                ,headers: {
+                    "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
+                }
             }).then(
                 result => {
                     this.statusList = result.data;
@@ -261,7 +270,10 @@ export default {
         getDepartments() {
             axios({
             method: 'GET',
-            url: `http://localhost:8080/api/v1/departments`
+            url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/departments`
+            ,headers: {
+                "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
+            }
             }).then(
             result => {
                 this.departmentList = result.data.content;
@@ -275,7 +287,10 @@ export default {
         getStores() {
             axios({
             method: "GET",
-            url: `http://localhost:8080/api/v1/stores`
+            url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/stores`,
+            headers: {
+                "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
+            }
             }).then(
             result => {
                 this.storeList = result.data.content;
@@ -289,7 +304,10 @@ export default {
         getUsers() {
             axios({
             method: "GET",
-            url: `http://localhost:8080/api/v1/users`
+            url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/users`,
+            headers: {
+                "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
+            }
             }).then(
             result => {
                 this.userList = result.data.content;
@@ -331,8 +349,11 @@ export default {
                 console.log(this.validateAsset());
                 axios({
                     method: 'POST',
-                    url: `http://localhost:8080/api/v1/assets`,
+                    url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/assets`,
                     data: this.newAsset,
+                    headers: {
+                        "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
+                    }
                 }).then(
                     result => {
                         if (result.data) {
