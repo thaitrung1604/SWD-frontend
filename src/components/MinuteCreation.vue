@@ -160,7 +160,7 @@ export default {
         },
         insertMinute() {
             this.newMinute.assetId = this.selectedAsset;
-            this.newMinute.currentUserId = this.currentUserId;
+            this.newMinute.currentUserId = this.selectedCurrentUser;
             // this.newMinute.currentUserId = this.selectedCurrentUser;
             if (this.validate()) {
                 axios({
