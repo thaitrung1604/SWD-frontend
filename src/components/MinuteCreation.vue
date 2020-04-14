@@ -93,8 +93,8 @@ export default {
             },
             userList: [],
             assetList: [],
-            selectedPreUser: '',
-            // selectedCurrentUser: '',
+            // selectedPreUser: '',
+            selectedCurrentUser: '',
             selectedAsset: '',
         }
     },
@@ -104,12 +104,12 @@ export default {
     },
     methods: {
         validate() {
-            var assetId, previousUserId;
+            var assetId, currentUserId;
             assetId = this.selectedAsset;
-            previousUserId = this.selectedPreUser;
-            // currentUserId = this.selectedCurrentUser;
+            // previousUserId = this.selectedPreUser;
+            currentUserId = this.selectedCurrentUser;
             
-            if (!assetId || !previousUserId) {
+            if (!assetId || !currentUserId) {
                 return false;
             }
 
@@ -160,7 +160,7 @@ export default {
         },
         insertMinute() {
             this.newMinute.assetId = this.selectedAsset;
-            this.newMinute.previousUserId = this.selectedPreUser;
+            this.newMinute.currentUserId = this.currentUserId;
             // this.newMinute.currentUserId = this.selectedCurrentUser;
             if (this.validate()) {
                 axios({
