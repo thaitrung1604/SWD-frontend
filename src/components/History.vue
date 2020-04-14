@@ -8,7 +8,13 @@
         </p>
       </el-row>
       <el-header style="text-align: right; font-size: 12px">
-        <el-date-picker type="date" value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="searchDate" style="width: 50%; float: left"></el-date-picker>
+        <el-input
+          style="width: 30%; float: left"
+          placeholder="Type something"
+          prefix-icon="el-icon-search"
+          v-model="searchValue">
+        </el-input>
+        <el-date-picker type="date" value-format="yyyy-MM-dd" format="yyyy-MM-dd" v-model="searchDate" style="width: 30%; float: left; margin-left: 10px;"></el-date-picker>
         <el-button icon="el-icon-search" primary @click="searchHistory">Tìm kiếm</el-button>
       </el-header>
 
@@ -44,6 +50,7 @@ export default {
         tableData: [],
         statusList: ['Good', 'Bad', "Repairing"],
         searchDate: '',
+        searchValue: '',
       }
     },
     mounted() {
@@ -81,11 +88,18 @@ export default {
       },
       searchHistory() {
         const self = this;
-        console.log(self.searchDate);
+        var url = '';
         
+        if (self.searchDate && !self.searchValue) {
+          url = `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/histories?page=0&size=10&sortBy=date&sortOrder=DESC&searchBy=date&searchValue=${this.searchDate}`;
+        } else if (self.searchValue && !self.searchDate) {
+          url = `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/histories?page=0&size=10&searchBy=asset_id&searchValue=${self.searchValue}`
+        } else if (self.searchDate && self.searchValue) {
+          url = `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/histories?page=0&size=10&searchBy=asset_id&searchValue=${self.searchValue}`
+        }      
         axios({
           method: "GET",
-          url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/histories?page=0&size=10&sortBy=date&sortOrder=DESC&searchBy=date&searchValue=${this.searchDate}`
+          url: url
           ,headers: {
             "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
           }
