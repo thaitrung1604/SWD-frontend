@@ -26,7 +26,7 @@
                 </el-col>
             </el-row>
         </el-container>
-        <el-container style="background: #FAFAFA;">
+        <!-- <el-container style="background: #FAFAFA;">
            <el-row :gutter="20" class="input-row">
                 <el-col :span="12">
                     <div class="grid-content bg-purple">
@@ -42,7 +42,7 @@
                     </div>
                 </el-col>
             </el-row>
-        </el-container>
+        </el-container> -->
         <el-container style="background: #FAFAFA;">
            <el-row :gutter="20" class="input-row">
                 <el-col :span="12">
@@ -88,13 +88,13 @@ export default {
         return {
             newMinute: {
                 assetId: '',
-                previousUserId: '',
+                // previousUserId: '',
                 currentUserId: '',
             },
             userList: [],
             assetList: [],
             selectedPreUser: '',
-            selectedCurrentUser: '',
+            // selectedCurrentUser: '',
             selectedAsset: '',
         }
     },
@@ -104,12 +104,12 @@ export default {
     },
     methods: {
         validate() {
-            var assetId, previousUserId, currentUserId;
+            var assetId, previousUserId;
             assetId = this.selectedAsset;
             previousUserId = this.selectedPreUser;
-            currentUserId = this.selectedCurrentUser;
+            // currentUserId = this.selectedCurrentUser;
             
-            if (!assetId || !previousUserId || !currentUserId || (previousUserId === currentUserId)) {
+            if (!assetId || !previousUserId) {
                 return false;
             }
 
@@ -125,7 +125,7 @@ export default {
             }).then(
             result => {
                 this.userList = result.data.content;
-                this.selectedCurrentUser = this.userList[0].id;
+                // this.selectedCurrentUser = this.userList[0].id;
                 this.selectedPreUser = this.userList[0].id;
             },
             error => {
@@ -161,7 +161,7 @@ export default {
         insertMinute() {
             this.newMinute.assetId = this.selectedAsset;
             this.newMinute.previousUserId = this.selectedPreUser;
-            this.newMinute.currentUserId = this.selectedCurrentUser;
+            // this.newMinute.currentUserId = this.selectedCurrentUser;
             if (this.validate()) {
                 axios({
                     method: 'POST',

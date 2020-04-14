@@ -5,7 +5,7 @@
             <el-row>
                 <el-col style="font-weight:bold; margin: 20px; font-size: 28px">
                     <i class="el-icon-edit"></i>
-                    Chỉnh sửa nhà cung cấp
+                    Chỉnh sửa phòng ban
                 </el-col>
             </el-row>
         </el-container>
@@ -17,15 +17,15 @@
                     prefix-icon="el-icon-search"
                     v-model="searchValue">
                 </el-input>
-                <el-button icon="el-icon-search" primary @click="searchSupplier">Tìm kiếm</el-button>
+                <el-button icon="el-icon-search" primary @click="searchDepartment">Tìm kiếm</el-button>
             </el-row>
         </el-container>
         <el-container style="background: #FAFAFA;">
            <el-row :gutter="20" class="input-row">
                 <el-col :span="12">
                     <div class="grid-content bg-purple">
-                        <p>Tên nhà cung cấp</p>
-                        <el-input type="text" v-model="newSupplier.name"></el-input>
+                        <p>Tên phòng ban</p>
+                        <el-input type="text" v-model="newDepartment.name"></el-input>
                     </div>
                 </el-col>
             </el-row>
@@ -35,7 +35,7 @@
                 <el-col :span="12">
                     <div class="grid-content bg-purple">
                         <p>Email</p>
-                        <el-input type="text" v-model="newSupplier.email"></el-input>
+                        <el-input type="text" v-model="newDepartment.email"></el-input>
                     </div>
                 </el-col>
             </el-row>
@@ -45,7 +45,7 @@
                 <el-col :span="12">
                     <div class="grid-content bg-purple">
                         <p>Số điện thoại</p>
-                        <el-input type="text" v-model="newSupplier.phone"></el-input>
+                        <el-input type="text" v-model="newDepartment.phone"></el-input>
                     </div>
                 </el-col>
             </el-row>
@@ -58,7 +58,7 @@
         </el-container> -->
         <el-container style="background: #FAFAFA;">
             <el-row class="button-container">
-                <el-button type="primary" @click="insertSupplier">Cập nhật</el-button>
+                <el-button type="primary" @click="insertDepartment">Cập nhật</el-button>
             </el-row>
         </el-container>
     </el-conatiner>
@@ -70,16 +70,16 @@ import axios from 'axios';
 import { MessageBox } from 'element-ui';
 
 export default {
-    name: 'supplierUpdate',
+    name: 'departmentUpdate',
     components: {
         Menu,
     },
     data() {
         return {
-            newSupplier: {
+            newDepartment: {
                 name: '',
-                email: '',
                 phone: '',
+                email: '',
             },
             searchValue: '',
         }
@@ -90,9 +90,9 @@ export default {
             var matcher2 = new RegExp(`[0-9]{10}`);
             var name, checkEmail, checkPhone;
 
-            name = this.newSupplier.name;
-            checkPhone = matcher2.test(this.newSupplier.phone);
-            checkEmail = matcher1.test(String(this.newSupplier.email).toLowerCase());
+            name = this.newDepartment.name;
+            checkPhone = matcher2.test(this.newDepartment.phone);
+            checkEmail = matcher1.test(String(this.newDepartment.email).toLowerCase());
 
             if (!name || !checkEmail || !checkPhone) {
                 return false;
@@ -100,12 +100,12 @@ export default {
 
             return true;
         },
-        insertSupplier() {
+        insertDepartment() {
             if (this.validate()) {
                 axios({
                     method: 'PUT',
-                    url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/admin/suppliers/${this.searchValue}`,
-                    data: this.newSupplier,
+                    url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/admin/departments/${this.searchValue}`,
+                    data: this.newDepartment,
                     headers: {
                         "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
                     }
@@ -130,29 +130,31 @@ export default {
                 });
             }
         },
-        searchSupplier() {
-        const self = this;
-        axios({
-          method: 'GET',
-          url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/suppliers/${self.searchValue}`
-          ,headers: {
-            "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
-          }
-        }).then(
-          result => {
-            self.newSupplier.name = result.data.name;
-            self.newSupplier.email = result.data.email;
-            self.newSupplier.phone = result.data.phone;
-          },
-        ).catch(function (error) {
-          if (error.response && error.response.status === 404) {
-              MessageBox.alert('Nhà cung cấp không tồn tại', 'Thông báo', {
-                confirmButtonText: 'Đóng'
-              });
-              self.tableData = [];
+        searchDepartment() {
+            const self = this;
+            axios({
+            method: 'GET',
+            url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/departments/${this.searchValue}`,
+            headers: {
+                "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
             }
-        })
-      }
+            }).then(
+            result => {
+                self.newDepartment.name = result.data.name;
+                self.newDepartment.phone = result.data.phone;
+                self.newDepartment.email = result.data.email;
+            },
+            ).catch(function (error) {
+            console.log(error.response.status);
+            
+            if (error.response && error.response.status === 404) {
+                MessageBox.alert('Phòng ban không tồn tại', 'Thông báo', {
+                    confirmButtonText: 'Đóng'
+                });
+                self.tableData = [];
+                }
+            })
+        },
     },
 }
 </script>

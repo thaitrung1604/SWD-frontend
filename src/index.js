@@ -74,6 +74,21 @@ const routes = [
         name: 'supplierUpdate', 
         component: () => import('./components/SupplierUpdate.vue')
     },
+    {
+        path: '/storeUpdate',
+        name: 'storeUpdate', 
+        component: () => import('./components/StoreUpdate.vue')
+    },
+    {
+        path: '/departmentUpdate',
+        name: 'departmentUpdate', 
+        component: () => import('./components/DepartmentUpdate.vue')
+    },
+    {
+        path: '/assetUpdate',
+        name: 'assetUpdate', 
+        component: () => import('./components/AssetUpdate.vue')
+    },
 ];
   
 const router = new VueRouter({

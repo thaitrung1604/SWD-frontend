@@ -4,9 +4,20 @@
         <el-container style="background: #FAFAFA;">
             <el-row>
                 <el-col style="font-weight:bold; margin: 20px; font-size: 28px">
-                    <i class="el-icon-plus"></i>
-                    Thêm mới tài sản
+                    <i class="el-icon-edit"></i>
+                    Chỉnh sửa tài sản
                 </el-col>
+            </el-row>
+        </el-container>
+        <el-container style="background: #FAFAFA;">
+            <el-row style="margin-left: 30px;">
+                <el-input
+                    style="width: 50%; float: left"
+                    placeholder="Type something"
+                    prefix-icon="el-icon-search"
+                    v-model="searchValue">
+                </el-input>
+                <el-button icon="el-icon-search" primary @click="searchAsset">Tìm kiếm</el-button>
             </el-row>
         </el-container>
         <el-container style="background: #FAFAFA;">
@@ -26,7 +37,7 @@
                 <el-col :span="6">
                     <div class="grid-content bg-purple">
                         <p>Phân loại</p>
-                        <el-select v-model="selectedType" placeholder="Select">
+                        <el-select v-model="selectedType" disabled placeholder="Select">
                             <el-option
                             v-for="item in typeList"
                             :key="item.id"
@@ -39,7 +50,7 @@
                 <el-col :span="6">
                     <div class="grid-content bg-purple">
                         <p>Nhà cung cấp</p>
-                        <el-select v-model="selectedSupplier" placeholder="Select">
+                        <el-select v-model="selectedSupplier" disabled placeholder="Select">
                             <el-option
                             v-for="item in supplierList"
                             :key="item.id"
@@ -56,7 +67,7 @@
                 <el-col :span="6">
                     <div class="grid-content bg-purple">
                         <p>Mã người quản lý</p>
-                        <el-select v-model="selectedUser" placeholder="Select">
+                        <el-select v-model="selectedUser" disabled placeholder="Select">
                             <el-option
                             v-for="item in userList"
                             :key="item.id"
@@ -69,7 +80,7 @@
                 <el-col :span="6">
                     <div class="grid-content bg-purple">
                         <p>Mã phòng ban quản lý</p>
-                        <el-select v-model="selectedDepartment" placeholder="Select">
+                        <el-select v-model="selectedDepartment" disabled placeholder="Select">
                             <el-option
                             v-for="item in departmentList"
                             :key="item.id"
@@ -95,7 +106,7 @@
                 <el-col :span="6">
                     <div class="grid-content bg-purple">
                         <p>Trạng thái</p>
-                        <el-select v-model="selectedStatus" placeholder="Select">
+                        <el-select v-model="selectedStatus" disabled placeholder="Select">
                             <el-option
                             v-for="item in statusList"
                             :key="item.id"
@@ -150,7 +161,7 @@
         </el-container>
         <el-container style="background: #FAFAFA;">
             <el-row class="button-container">
-                <el-button type="primary" @click="insertAsset">Thêm mới</el-button>
+                <el-button type="primary" @click="insertAsset">Cập nhật</el-button>
             </el-row>
         </el-container>
     </el-conatiner>
@@ -162,7 +173,7 @@ import { MessageBox } from 'element-ui';
 import axios from "axios";
 
 export default {
-    name: 'assetCreation',
+    name: 'assetUpdate',
     components: {
         Menu,
     },
@@ -206,16 +217,17 @@ export default {
             selectedDepartment: '',
             // selectedStore: '',
             selectedUser: '',
-
+            searchValue: '',
+            tableDate: [],
         }
     },
     mounted() {
-        this.getAssetTypes();
-        this.getSuppliers();
-        this.getStatus();
-        this.getDepartments();
-        // this.getStores();
-        this.getUsers();
+        // this.getAssetTypes();
+        // this.getSuppliers();
+        // this.getStatus();
+        // this.getDepartments();
+        // // this.getStores();
+        // this.getUsers();
     },
     methods: {
         getAssetTypes() {
@@ -348,8 +360,8 @@ export default {
             } else {
                 console.log(this.validateAsset());
                 axios({
-                    method: 'POST',
-                    url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/assets`,
+                    method: 'PUT',
+                    url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/assets/${this.searchValue}`,
                     data: this.newAsset,
                     headers: {
                         "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
@@ -357,19 +369,49 @@ export default {
                 }).then(
                     result => {
                         if (result.data) {
-                            MessageBox.alert('Thêm mới thành công!', 'Thông báo', {
+                            MessageBox.alert('Chỉnh sửa thành công!', 'Thông báo', {
                                 confirmButtonText: 'Đóng'
                             });
                         }
                     },
                     error => {
                         console.error(error);
-                        MessageBox.alert('Thêm mới thất bại. Vui lòng thử lại!', 'Thông báo', {
+                        MessageBox.alert('Chỉnh sửa thất bại. Vui lòng thử lại!', 'Thông báo', {
                             confirmButtonText: 'Đóng'
                         });
                     }
                 )
             }
+        },
+        searchAsset() {
+        const self = this;
+        axios({
+            method: "GET",
+            url: `https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/assets/${self.searchValue}`,
+            headers: {
+            "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
+            }
+        }).then(
+            result => {
+            self.newAsset.name = result.data.name;
+            self.newAsset.description = result.data.description;
+            self.newAsset.price = result.data.price;
+            self.newAsset.purchaseDate = result.data.purchaseDate.substring(0,10);
+            self.newAsset.expiryWarrantyDate = result.data.nextWarrantyDate.substring(0,10);
+            self.newAsset.nextWarrantyDate = result.data.nextWarrantyDate.substring(0,10);
+            self.selectedType = result.data.type.id;
+            self.selectedStatus = result.data.status.id;
+            self.selectedDepartment = result.data.department.id;
+            self.selectedSupplier = result.data.supplier.id;
+            self.selectedUser = result.data.user.id;
+            }).catch(function (error) {
+                if (error.response && error.response.status === 404) {
+                MessageBox.alert('Tài sản không tồn tại', 'Thông báo', {
+                    confirmButtonText: 'Đóng'
+                });
+                self.tableData = [];
+                }
+            })
         },
     },
 }

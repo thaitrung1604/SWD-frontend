@@ -64,10 +64,10 @@
             </p>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="5-1" @click="goToMinute">Chỉnh sửa tài sản</el-menu-item>
-            <el-menu-item index="5-2" @click="goToMinute">Chỉnh sửa cửa hàng</el-menu-item>
-            <el-menu-item index="5-3" @click="goToMinute">Chỉnh sửa phòng ban</el-menu-item>
-            <el-menu-item index="5-4" @click="goToMinute">Chỉnh sửa nhà cung cấp</el-menu-item>
+            <el-menu-item index="5-1" @click="goToUpdateAsset">Chỉnh sửa tài sản</el-menu-item>
+            <el-menu-item index="5-2" @click="goToUpdateStore">Chỉnh sửa cửa hàng</el-menu-item>
+            <el-menu-item index="5-3" @click="goToUpdateDepartment">Chỉnh sửa phòng ban</el-menu-item>
+            <el-menu-item index="5-4" @click="goToUpdateSupplier">Chỉnh sửa nhà cung cấp</el-menu-item>
             <el-menu-item index="5-5" @click="goToMinute">Thông tin người dùng</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
@@ -165,6 +165,26 @@
         goToCreateMinute: function() {
           if (this.$route.name !== 'minuteCreation') {
             this.$router.push({name: 'minuteCreation'});
+          }
+        },
+        goToUpdateSupplier: function() {
+          if (this.$route.name !== 'supplierUpdate') {
+            this.$router.push({name: 'supplierUpdate'});
+          }
+        },
+        goToUpdateStore: function() {
+          if (this.$route.name !== 'storeUpdate') {
+            this.$router.push({name: 'storeUpdate'});
+          }
+        },
+        goToUpdateDepartment: function() {
+          if (this.$route.name !== 'departmentUpdate') {
+            this.$router.push({name: 'departmentUpdate'});
+          }
+        },
+        goToUpdateAsset: function() {
+          if (this.$route.name !== 'assetUpdate') {
+            this.$router.push({name: 'assetUpdate'});
           }
         },
 
