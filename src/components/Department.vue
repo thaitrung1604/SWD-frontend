@@ -53,7 +53,7 @@ export default {
       getDepartments() {
         axios({
           method: 'GET',
-          url: `http://localhost:8080/api/v1/departments`
+          url: `https://assetmanagementapi.herokuapp.com/api/v1/departments`
         }).then(
           result => {
             this.tableData = result.data.content;
@@ -70,7 +70,7 @@ export default {
         const self = this;
         axios({
           method: 'GET',
-          url: `http://localhost:8080/api/v1/departments/${this.searchValue}`
+          url: `https://assetmanagementapi.herokuapp.com/api/v1/departments/${this.searchValue}`
         }).then(
           result => {
             let tableTmp = [];
