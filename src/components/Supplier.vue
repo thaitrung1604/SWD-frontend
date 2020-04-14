@@ -14,19 +14,16 @@
           prefix-icon="el-icon-search"
           v-model="searchValue">
         </el-input>
-        <el-button icon="el-icon-search" primary>Tìm kiếm</el-button>
+        <el-button icon="el-icon-search" primary @click="searchSupplier">Tìm kiếm</el-button>
       </el-header>
 
       <el-main>
         <el-table :data="tableData">
-          <el-table-column prop="id" label="Id" width="50">
+          <el-table-column prop="id" label="Mã nhà cung cấp" width="200">
           </el-table-column>
-          <el-table-column prop="name" label="Name" width="200"></el-table-column>
-          <el-table-column align="center" label="Cover">
-            <template slot-scope="scope" class="image-slot">
-              <el-image style="width: 180px; height: 180px" :src="scope.row.avatar" lazy></el-image>
-            </template>
-          </el-table-column>
+          <el-table-column prop="name" label="Tên nhà cung cấp" width="200"></el-table-column>
+          <el-table-column prop="email" label="E-mail" width="200"></el-table-column>
+          <el-table-column prop="phone" label="Số điện thoại" width="200"></el-table-column>
         </el-table>
       </el-main>
     </el-container>
@@ -36,6 +33,8 @@
 
 <script>
 import Menu from './Menu.vue';
+import axios from "axios";
+import { MessageBox } from 'element-ui';
 
 export default {
     name: 'supplier',
@@ -44,13 +43,50 @@ export default {
     },
     data () {
       return {
-
+        tableData: [],
+        searchValue: '',
       }
     },
+    mounted() {
+      this.getSuppliers();
+    },
     methods: {
-      handleDuplicate() {
-        
+      getSuppliers() {
+        axios({
+          method: 'GET',
+          url: `http://localhost:8080/api/v1/suppliers`
+        }).then(
+          result => {
+            this.tableData = result.data.content;
+          },
+          error => {
+            console.error(error);
+          }
+        )
       },
+      handleDuplicate() {
+        this.getSuppliers();
+      },
+      searchSupplier() {
+        const self = this;
+        axios({
+          method: 'GET',
+          url: `http://localhost:8080/api/v1/suppliers/${self.searchValue}`
+        }).then(
+          result => {
+            let tableTmp = [];
+            tableTmp.push(result.data);
+            self.tableData = tableTmp;
+          },
+        ).catch(function (error) {
+          if (error.response && error.response.status === 404) {
+              MessageBox.alert('Nhà cung cấp không tồn tại', 'Thông báo', {
+                confirmButtonText: 'Đóng'
+              });
+              self.tableData = [];
+            }
+        })
+      }
     },
 }
 </script>

@@ -6,8 +6,8 @@ Vue.use(VueRouter);
 const routes = [
     {
         path: '',
-        name: '', 
-        component: () => import('./components/Sample.vue')
+        name: 'login', 
+        component: () => import('./components/Login.vue')
     },
     {
         path: '/assets',
@@ -58,6 +58,21 @@ const routes = [
         path: '/supplierCreation',
         name: 'supplierCreation', 
         component: () => import('./components/SupplierCreation.vue')
+    },
+    {
+        path: '/minuteOfHandover',
+        name: 'minuteOfHandover', 
+        component: () => import('./components/MinuteOfHandover.vue')
+    },
+    {
+        path: '/minuteCreation',
+        name: 'minuteCreation', 
+        component: () => import('./components/MinuteCreation.vue')
+    },
+    {
+        path: '/supplierUpdate',
+        name: 'supplierUpdate', 
+        component: () => import('./components/SupplierUpdate.vue')
     },
 ];
   

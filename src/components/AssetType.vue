@@ -14,19 +14,14 @@
           prefix-icon="el-icon-search"
           v-model="searchValue">
         </el-input>
-        <el-button icon="el-icon-search" primary>Tìm kiếm</el-button>
+        <el-button icon="el-icon-search" primary @click="searchAssetType">Tìm kiếm</el-button>
       </el-header>
 
       <el-main>
         <el-table :data="tableData">
-          <el-table-column prop="id" label="Id" width="50">
+          <el-table-column prop="id" label="Mã loại tài sản" width="500">
           </el-table-column>
-          <el-table-column prop="name" label="Name" width="200"></el-table-column>
-          <el-table-column align="center" label="Cover">
-            <template slot-scope="scope" class="image-slot">
-              <el-image style="width: 180px; height: 180px" :src="scope.row.avatar" lazy></el-image>
-            </template>
-          </el-table-column>
+          <el-table-column prop="name" label="Loại tài sản" width="500"></el-table-column>
         </el-table>
       </el-main>
     </el-container>
@@ -36,6 +31,8 @@
 
 <script>
 import Menu from './Menu.vue';
+import axios from "axios";
+import { MessageBox } from 'element-ui';
 
 export default {
     name: 'assetType',
@@ -44,12 +41,55 @@ export default {
     },
     data () {
       return {
-
+        tableData: [],
+        searchValue: '',
       }
     },
+    mounted() {
+      this.getAssetTypes();
+    },
     methods: {
+      getAssetTypes() {
+        axios({
+          method: 'GET',
+          url: `http://localhost:8080/api/v1/types`
+        }).then(
+          result => {
+            this.tableData = result.data;
+          },
+          error => {
+            console.error(error);
+          }
+        )
+      },
       handleDuplicate() {
-        
+        this.getAssetTypes();
+      },
+      searchAssetType() {
+        const self = this;
+        axios({
+          method: 'GET',
+          url: `http://localhost:8080/api/v1/types/${this.searchValue}`
+        }).then(
+          result => {
+            let tableTmp = [];
+            if (Array.isArray(result.data)) {
+              result.data.forEach(element => {
+                tableTmp.push(element);
+              });
+            } else if (result.data && !Array.isArray(result.data)){
+              tableTmp.push(result.data);
+            }
+            this.tableData = tableTmp;
+          },
+        ).catch(function (error) {
+          if (error.response && error.response.status === 404) {
+              MessageBox.alert('Loại tài sản không tồn tại', 'Thông báo', {
+                confirmButtonText: 'Đóng'
+              });
+              self.tableData = [];
+            }
+        })
       },
     },
 }

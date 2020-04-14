@@ -4,7 +4,7 @@
     <el-container>
       <el-row>
         <p style="font-weight: bold; font-size: 28px; text-align: left">
-          <i class="el-icon-s-shop"></i> Danh mục cửa hàng
+          <i class="el-icon-tickets"></i> Phiếu bàn giao
         </p>
       </el-row>
       <el-header style="text-align: right; font-size: 12px">
@@ -14,15 +14,18 @@
           prefix-icon="el-icon-search"
           v-model="searchValue">
         </el-input>
-        <el-button icon="el-icon-search" primary @click="searchStore">Tìm kiếm</el-button>
+        <el-button icon="el-icon-search" primary @click="searchMinute">Tìm kiếm</el-button>
       </el-header>
 
       <el-main>
         <el-table :data="tableData">
-          <el-table-column prop="id" label="Mã cửa hàng" width="200"></el-table-column>
-          <el-table-column prop="name" label="Tên cửa hàng" width="250"></el-table-column>
-          <el-table-column prop="address" label="Địa chỉ" width="250"></el-table-column>
-          <el-table-column prop="phone" label="Số điện thoại" width="200"></el-table-column>
+          <el-table-column prop="date" label="Ngày thực hiện" width="250"></el-table-column>
+          <el-table-column prop="createBy" label="Người thực hiện" width="250"></el-table-column>
+          <el-table-column prop="assetId" label="Mã tài sản" width="200"></el-table-column>
+          <el-table-column prop="currentStoreId" label="Cửa hàng hiện tại" width="200"></el-table-column>
+          <el-table-column prop="previousStoreId" label="Cửa hàng bàn giao" width="200"></el-table-column>
+          <el-table-column prop="currentUserId" label="Người tiếp quản" width="200"></el-table-column>
+          <el-table-column prop="previousUserId" label="Người bàn giao" width="200"></el-table-column>
         </el-table>
       </el-main>
     </el-container>
@@ -36,7 +39,7 @@ import Menu from './Menu.vue';
 import { MessageBox } from 'element-ui';
 
 export default {
-    name: 'store',
+    name: 'minuteOfHandover',
     components: {
         Menu,
     },
@@ -47,16 +50,23 @@ export default {
       }
     },
     mounted() {
-      this.getStores();
+      this.getMinutes();
     },
     methods: {
-      getStores() {
+      getMinutes() {
+          const self = this;
         axios({
           method: "GET",
-          url: `http://localhost:8080/api/v1/stores`
+          url: `http://localhost:8080/api/v1/minuteofhandovers`
         }).then(
           result => {
-            this.tableData = result.data.content;
+            self.tableData = result.data.content;
+
+            self.tableData.map((el) => {
+                el.date = el.date.substring(0,10);
+
+                return el;
+            })
           },
           error => {
             console.error(error);
@@ -64,22 +74,28 @@ export default {
         ) 
       },
       handleDuplicate() {
-        this.getStores();
+        this.getMinutes();
       },
-      searchStore() {
+      searchMinute() {
         const self = this;
         axios({
           method: "GET",
-          url: `http://localhost:8080/api/v1/stores/${this.searchValue}`
+          url: `http://localhost:8080/api/v1/minuteofhandovers/${this.searchValue}`
         }).then(
           result => {
             let tableTmp = [];
             tableTmp.push(result.data);
             this.tableData = tableTmp;
+
+            self.tableData.map((el) => {
+                el.date = el.date.substring(0,10);
+
+                return el;
+            })
           },
         ).catch(function (error) {
             if (error.response && error.response.status === 404) {
-              MessageBox.alert('Cửa hàng không tồn tại', 'Thông báo', {
+              MessageBox.alert('Biên bản không tồn tại', 'Thông báo', {
                 confirmButtonText: 'Đóng'
               });
               self.tableData = [];

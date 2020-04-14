@@ -14,7 +14,7 @@
                 <el-col :span="12">
                     <div class="grid-content bg-purple">
                         <p>Tên cửa hàng</p>
-                        <el-input type="text" ></el-input>
+                        <el-input type="text" v-model="newStore.name"></el-input>
                     </div>
                 </el-col>
             </el-row>
@@ -24,7 +24,7 @@
                 <el-col :span="12">
                     <div class="grid-content bg-purple">
                         <p>Địa chỉ</p>
-                        <el-input type="text" ></el-input>
+                        <el-input type="text" v-model="newStore.address"></el-input>
                     </div>
                 </el-col>
             </el-row>
@@ -34,7 +34,7 @@
                 <el-col :span="12">
                     <div class="grid-content bg-purple">
                         <p>Số điện thoại</p>
-                        <el-input type="text"></el-input>
+                        <el-input type="text" v-model="newStore.phone"></el-input>
                     </div>
                 </el-col>
             </el-row>
@@ -47,7 +47,7 @@
         </el-container> -->
         <el-container style="background: #FAFAFA;">
             <el-row class="button-container">
-                <el-button type="primary">Thêm mới</el-button>
+                <el-button type="primary" @click="insertStore">Thêm mới</el-button>
             </el-row>
         </el-container>
     </el-conatiner>
@@ -55,6 +55,8 @@
 
 <script>
 import Menu from './Menu.vue';
+import axios from 'axios';
+import { MessageBox } from 'element-ui';
 
 export default {
     name: 'storeCreation',
@@ -63,11 +65,55 @@ export default {
     },
     data() {
         return {
-            
+            newStore: {
+                name: '',
+                address: '',
+                phone: '',
+            }
         }
     },
     methods: {
+        validate() {
+            var name, address, phone, checkPhone;
+            name = this.newStore.name;
+            address = this.newStore.address;
+            phone = this.newStore.phone;
+            
+            var matcher = new RegExp(`[0-9]{10}`);
+            checkPhone = matcher.test(phone);
+            if (!name || !address || !checkPhone) {
+                return false;
+            }
 
+            return true;
+        },
+        insertStore() {
+            if (this.validate()) {
+                axios({
+                    method: 'POST',
+                    url: `http://localhost:8080/api/v1/admin/stores`,
+                    data: this.newStore,
+                }).then(
+                    result => {
+                        if (result.data) {
+                            MessageBox.alert('Thêm mới thành công!', 'Thông báo', {
+                                confirmButtonText: 'Đóng'
+                            });
+                        }
+                    },
+                    error => {
+                        console.error(error);
+                        MessageBox.alert('Thêm mới thất bại. Vui lòng thử lại!', 'Thông báo', {
+                            confirmButtonText: 'Đóng'
+                        });
+                    }
+                )
+            } else {
+                MessageBox.alert('Xin vui lòng điền đầy đủ thông tin!', 'Thông báo', {
+                    confirmButtonText: 'Đóng'
+                });
+            }
+        }
     },
 }
 </script>

@@ -1,6 +1,6 @@
 
 <template>
-  <el-container style="height: 500px; border: 1px solid #eee;">
+  <el-container style="height: 500px; width: 100%; border: 1px solid #eee;">
     <Menu @handleDuplicateMenu="handleDuplicate"/>
     <el-container>
       <el-row>
@@ -15,20 +15,25 @@
           prefix-icon="el-icon-search"
           v-model="searchValue">
         </el-input>
-        <el-button icon="el-icon-search" primary>Tìm kiếm</el-button>
-        <el-button icon="el-icon-edit" primary>Cập nhật</el-button>
+        <el-button icon="el-icon-search" primary @click="searchAsset">Tìm kiếm</el-button>
       </el-header>
 
       <el-main>
-        <el-table :data="tableData">
-          <el-table-column prop="id" label="Id" width="50">
+        <el-table :data="tableData" height="310">
+          <el-table-column prop="id" label="Mã tài sản" width="100">
           </el-table-column>
-          <el-table-column prop="name" label="Name" width="200"></el-table-column>
-          <el-table-column align="center" label="Cover">
-            <template slot-scope="scope" class="image-slot">
-              <el-image style="width: 180px; height: 180px" :src="scope.row.avatar" lazy></el-image>
-            </template>
-          </el-table-column>
+          <el-table-column prop="name" label="Tên tài sản" width="100"></el-table-column>
+          <el-table-column prop="description" label="Mô tả" width="200"></el-table-column>
+          <el-table-column prop="price" label="Giá tiền" width="100"></el-table-column>
+          <el-table-column prop="purchaseDate" label="Ngày nhập" width="150"></el-table-column>
+          <el-table-column prop="nextWarrantyDate" label="Ngày bảo hành" width="200"></el-table-column>
+          <el-table-column prop="expiryWarrantyDate" label="Hạn bảo hành" width="200"></el-table-column>
+          <el-table-column prop="type.name" label="Loại tài sản" width="200"></el-table-column>
+          <el-table-column prop="status.name" label="Trạng thái" width="200"></el-table-column>
+          <el-table-column prop="department.name" label="Phòng ban" width="200"></el-table-column>
+          <el-table-column prop="store.name" label="Cửa hàng" width="200"></el-table-column>
+          <el-table-column prop="supplier.name" label="Nhà phân phối" width="200"></el-table-column>
+          <el-table-column prop="user.name" label="Người quản lý" width="200"></el-table-column>
         </el-table>
       </el-main>
     </el-container>
@@ -48,6 +53,7 @@
 <script>
 import axios from "axios";
 import Menu from "./Menu.vue";
+import { MessageBox } from 'element-ui';
 
 export default {
   components: {
@@ -64,20 +70,68 @@ export default {
   },
   methods: {
     getAssetsData() {
+      const self = this;
       axios({
         method: "GET",
-        url: "http://5e8a0bd9b4252f0016a623ed.mockapi.io/users"
+        url: "https://cors-anywhere.herokuapp.com/https://assetmanagementapi.herokuapp.com/api/v1/assets",
+        headers: {
+          "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
+        }
       }).then(
         result => {
-          this.tableData = result.data;
+          self.tableData = result.data.content;
+
+          self.tableData.map((el) => {
+            el.purchaseDate = el.purchaseDate.substring(0,10);
+            el.expiryWarrantyDate = el.expiryWarrantyDate.substring(0,10);
+            el.nextWarrantyDate = el.nextWarrantyDate.substring(0,10);
+            return el;
+          })
         },
-        error => {
+      ).catch(function(error) {
           console.error(error);
-        }
-      );
+          if (error.response && error.response.status === 403) {
+                MessageBox.alert('Hết quyền truy cập!', 'Thông báo', {
+                    confirmButtonText: 'Đóng'
+              });
+              self.goOut(); 
+          }
+      });
     },
     handleDuplicate() {
       this.getAssetsData();
+    },
+    searchAsset() {
+      const self = this;
+       axios({
+        method: "GET",
+        url: `https://assetmanagementapi.herokuapp.com/api/v1/assets/${self.searchValue}`,
+        headers: {
+          "Authorization" : `Bearer ${localStorage.getItem("LOGIN_TOKEN")}`
+        }
+      }).then(
+        result => {
+          let tableTmp = [];
+          tableTmp.push(result.data);
+          self.tableData = tableTmp;
+
+          self.tableData.map((el) => {
+            el.purchaseDate = el.purchaseDate.substring(0,10);
+            el.expiryWarrantyDate = el.expiryWarrantyDate.substring(0,10);
+            el.nextWarrantyDate = el.nextWarrantyDate.substring(0,10);
+            return el;
+          })
+        }).catch(function (error) {
+            if (error.response && error.response.status === 404) {
+              MessageBox.alert('Tài sản không tồn tại', 'Thông báo', {
+                confirmButtonText: 'Đóng'
+              });
+              self.tableData = [];
+            }
+        })
+    },
+    goOut() {
+      this.$router.push({name: 'login'});
     }
   }
 };

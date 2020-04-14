@@ -14,7 +14,7 @@
                 <el-col :span="12">
                     <div class="grid-content bg-purple">
                         <p>Tên nhà cung cấp</p>
-                        <el-input type="text" ></el-input>
+                        <el-input type="text" v-model="newSupplier.name"></el-input>
                     </div>
                 </el-col>
             </el-row>
@@ -23,8 +23,8 @@
            <el-row :gutter="20" class="input-row">
                 <el-col :span="12">
                     <div class="grid-content bg-purple">
-                        <p>Địa chỉ</p>
-                        <el-input type="text" ></el-input>
+                        <p>Email</p>
+                        <el-input type="text" v-model="newSupplier.email"></el-input>
                     </div>
                 </el-col>
             </el-row>
@@ -34,7 +34,7 @@
                 <el-col :span="12">
                     <div class="grid-content bg-purple">
                         <p>Số điện thoại</p>
-                        <el-input type="text"></el-input>
+                        <el-input type="text" v-model="newSupplier.phone"></el-input>
                     </div>
                 </el-col>
             </el-row>
@@ -47,7 +47,7 @@
         </el-container> -->
         <el-container style="background: #FAFAFA;">
             <el-row class="button-container">
-                <el-button type="primary">Thêm mới</el-button>
+                <el-button type="primary" @click="insertSupplier">Thêm mới</el-button>
             </el-row>
         </el-container>
     </el-conatiner>
@@ -55,6 +55,8 @@
 
 <script>
 import Menu from './Menu.vue';
+import axios from 'axios';
+import { MessageBox } from 'element-ui';
 
 export default {
     name: 'supplierCreation',
@@ -63,11 +65,56 @@ export default {
     },
     data() {
         return {
-            
+            newSupplier: {
+                name: '',
+                email: '',
+                phone: '',
+            }
         }
     },
     methods: {
+        validate() {
+            var matcher1 = new RegExp(`^(([^<>()\\[\\]\\.,;:\\s@"]+(\\.[^<>()\\[\\]\\.,;:\\s@"]+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$`);
+            var matcher2 = new RegExp(`[0-9]{10}`);
+            var name, checkEmail, checkPhone;
 
+            name = this.newSupplier.name;
+            checkPhone = matcher2.test(this.newSupplier.phone);
+            checkEmail = matcher1.test(String(this.newSupplier.email).toLowerCase());
+
+            if (!name || !checkEmail || !checkPhone) {
+                return false;
+            }
+
+            return true;
+        },
+        insertSupplier() {
+            if (this.validate()) {
+                axios({
+                    method: 'POST',
+                    url: `http://localhost:8080/api/v1/admin/suppliers`,
+                    data: this.newSupplier,
+                }).then(
+                    result => {
+                        if (result.data) {
+                            MessageBox.alert('Thêm mới thành công!', 'Thông báo', {
+                                confirmButtonText: 'Đóng'
+                            });
+                        }
+                    },
+                    error => {
+                        console.error(error);
+                        MessageBox.alert('Thêm mới thất bại. Vui lòng thử lại!', 'Thông báo', {
+                            confirmButtonText: 'Đóng'
+                        });
+                    }
+                )
+            } else {
+                MessageBox.alert('Xin vui lòng điền đầy đủ thông tin!', 'Thông báo', {
+                    confirmButtonText: 'Đóng'
+                });
+            }
+        }
     },
 }
 </script>

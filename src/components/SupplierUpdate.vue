@@ -4,17 +4,24 @@
         <el-container style="background: #FAFAFA;">
             <el-row>
                 <el-col style="font-weight:bold; margin: 20px; font-size: 28px">
-                    <i class="el-icon-plus"></i>
-                    Thêm mới phòng ban
+                    <i class="el-icon-edit"></i>
+                    Chỉnh sửa nhà cung cấp
                 </el-col>
             </el-row>
         </el-container>
         <el-container style="background: #FAFAFA;">
+            <el-input
+                style="width: 50%; float: left"
+                placeholder="Type something"
+                prefix-icon="el-icon-search"
+                v-model="searchValue">
+            </el-input>
+            <el-button icon="el-icon-search" primary @click="searchSupplier">Tìm kiếm</el-button>
            <el-row :gutter="20" class="input-row">
                 <el-col :span="12">
                     <div class="grid-content bg-purple">
-                        <p>Tên phòng ban</p>
-                        <el-input type="text" v-model="newDepartment.name"></el-input>
+                        <p>Tên nhà cung cấp</p>
+                        <el-input type="text" v-model="newSupplier.name"></el-input>
                     </div>
                 </el-col>
             </el-row>
@@ -24,7 +31,7 @@
                 <el-col :span="12">
                     <div class="grid-content bg-purple">
                         <p>Email</p>
-                        <el-input type="text" v-model="newDepartment.email"></el-input>
+                        <el-input type="text" v-model="newSupplier.email"></el-input>
                     </div>
                 </el-col>
             </el-row>
@@ -34,7 +41,7 @@
                 <el-col :span="12">
                     <div class="grid-content bg-purple">
                         <p>Số điện thoại</p>
-                        <el-input type="text" v-model="newDepartment.phone"></el-input>
+                        <el-input type="text" v-model="newSupplier.phone"></el-input>
                     </div>
                 </el-col>
             </el-row>
@@ -47,7 +54,7 @@
         </el-container> -->
         <el-container style="background: #FAFAFA;">
             <el-row class="button-container">
-                <el-button type="primary" @click="insertDepartment">Thêm mới</el-button>
+                <el-button type="primary" @click="insertSupplier">Thêm mới</el-button>
             </el-row>
         </el-container>
     </el-conatiner>
@@ -59,16 +66,16 @@ import axios from 'axios';
 import { MessageBox } from 'element-ui';
 
 export default {
-    name: 'departmentCreation',
+    name: 'supplierCreation',
     components: {
         Menu,
     },
     data() {
         return {
-            newDepartment: {
+            newSupplier: {
                 name: '',
-                phone: '',
                 email: '',
+                phone: '',
             }
         }
     },
@@ -78,9 +85,9 @@ export default {
             var matcher2 = new RegExp(`[0-9]{10}`);
             var name, checkEmail, checkPhone;
 
-            name = this.newDepartment.name;
-            checkPhone = matcher2.test(this.newDepartment.phone);
-            checkEmail = matcher1.test(String(this.newDepartment.email).toLowerCase());
+            name = this.newSupplier.name;
+            checkPhone = matcher2.test(this.newSupplier.phone);
+            checkEmail = matcher1.test(String(this.newSupplier.email).toLowerCase());
 
             if (!name || !checkEmail || !checkPhone) {
                 return false;
@@ -88,12 +95,12 @@ export default {
 
             return true;
         },
-        insertDepartment() {
+        insertSupplier() {
             if (this.validate()) {
                 axios({
                     method: 'POST',
-                    url: `http://localhost:8080/api/v1/admin/departments`,
-                    data: this.newDepartment,
+                    url: `http://localhost:8080/api/v1/admin/suppliers`,
+                    data: this.newSupplier,
                 }).then(
                     result => {
                         if (result.data) {

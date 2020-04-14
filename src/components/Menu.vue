@@ -36,7 +36,7 @@
             <el-menu-item index="2-4" @click="goToCreateSupplier">Thêm mới nhà cung cấp</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
-        <el-submenu index="3">
+        <el-submenu index="3" style="text-align: left">
           <template slot="title">
             <p style="text-align: left;">
               <i class="el-icon-menu"></i>Lịch sử
@@ -45,30 +45,41 @@
           <el-menu-item-group style="text-align: left;">
             <el-menu-item index="3-1" @click="goToHistory">Lịch sử tài sản</el-menu-item>
           </el-menu-item-group>
-          <el-menu-item-group title="Group 2">
-            <el-menu-item index="3-3">Option 3</el-menu-item>
-          </el-menu-item-group>
-          <el-submenu index="3-4">
-            <template slot="title">Option 4</template>
-            <el-menu-item index="3-4-1">Option 4-1</el-menu-item>
-          </el-submenu>
         </el-submenu>
-        <el-submenu index="4">
+        <el-submenu index="4" style="text-align: left">
           <template slot="title">
-            <i class="el-icon-setting"></i>Navigator Three
+            <p style="text-align: left;">
+                <i class="el-icon-tickets"></i>Biên bản
+            </p>
           </template>
           <el-menu-item-group>
-            <template slot="title">Group 1</template>
-            <el-menu-item index="4-1">Option 1</el-menu-item>
-            <el-menu-item index="4-2">Option 2</el-menu-item>
+            <el-menu-item index="4-1" @click="goToMinute">Biên bản bàn giao</el-menu-item>
+            <el-menu-item index="4-2" @click="goToCreateMinute">Tạo biên bản</el-menu-item>
           </el-menu-item-group>
-          <el-menu-item-group title="Group 2">
-            <el-menu-item index="4-3">Option 3</el-menu-item>
+        </el-submenu>
+        <el-submenu index="5" style="text-align: left">
+          <template slot="title">
+            <p style="text-align: left;">
+                <i class="el-icon-edit"></i>Chỉnh sửa
+            </p>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="5-1" @click="goToMinute">Chỉnh sửa tài sản</el-menu-item>
+            <el-menu-item index="5-2" @click="goToMinute">Chỉnh sửa cửa hàng</el-menu-item>
+            <el-menu-item index="5-3" @click="goToMinute">Chỉnh sửa phòng ban</el-menu-item>
+            <el-menu-item index="5-4" @click="goToMinute">Chỉnh sửa nhà cung cấp</el-menu-item>
+            <el-menu-item index="5-5" @click="goToMinute">Thông tin người dùng</el-menu-item>
           </el-menu-item-group>
-          <el-submenu index="4-4">
-            <template slot="title">Option 4</template>
-            <el-menu-item index="4-4-1">Option 4-1</el-menu-item>
-          </el-submenu>
+        </el-submenu>
+        <el-submenu index="6" style="text-align: left">
+          <template slot="title">
+            <p style="text-align: left;">
+                <i class="el-icon-edit"></i>Đăng xuất
+            </p>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="6-1" @click="logout">Đăng xuất</el-menu-item>
+          </el-menu-item-group>
         </el-submenu>
       </el-menu>
     </el-aside>
@@ -78,7 +89,7 @@
   export default {
       data () {
         return {
-          selectedOption: ['1', '2', '3'],
+          selectedOption: ['1', '2', '3', '4', '5'],
         }
       },
       methods: {
@@ -144,6 +155,24 @@
             this.$router.push({name: 'supplierCreation'});
           }
         },
+        goToMinute: function() {
+          if (this.$route.name !== 'minuteOfHandover') {
+            this.$router.push({name: 'minuteOfHandover'});
+          } else {
+            this.$emit('handleDuplicateMenu');
+          }
+        },
+        goToCreateMinute: function() {
+          if (this.$route.name !== 'minuteCreation') {
+            this.$router.push({name: 'minuteCreation'});
+          }
+        },
+
+
+        logout: function() {
+          localStorage.removeItem('LOGIN_TOKEN');
+            this.$router.push({name: 'login'});
+        }
       }
   }
 </script>

@@ -4,7 +4,7 @@
     <el-container>
       <el-row>
         <p style="font-weight: bold; font-size: 28px; text-align: left">
-          <i class="el-icon-office-building"></i> Danh mục phòng ban
+          <i class="el-icon-s-building"></i> Danh mục phòng ban
         </p>
       </el-row>
       <el-header style="text-align: right; font-size: 12px">
@@ -14,19 +14,15 @@
           prefix-icon="el-icon-search"
           v-model="searchValue">
         </el-input>
-        <el-button icon="el-icon-search" primary>Tìm kiếm</el-button>
+        <el-button icon="el-icon-search" primary @click="searchDepartment">Tìm kiếm</el-button>
       </el-header>
 
       <el-main>
         <el-table :data="tableData">
-          <el-table-column prop="id" label="Id" width="50">
-          </el-table-column>
-          <el-table-column prop="name" label="Name" width="200"></el-table-column>
-          <el-table-column align="center" label="Cover">
-            <template slot-scope="scope" class="image-slot">
-              <el-image style="width: 180px; height: 180px" :src="scope.row.avatar" lazy></el-image>
-            </template>
-          </el-table-column>
+          <el-table-column prop="id" label="Mã phòng ban" width="200"></el-table-column>
+          <el-table-column prop="name" label="Tên phòng ban" width="250"></el-table-column>
+          <el-table-column prop="email" label="E-mail" width="250"></el-table-column>
+          <el-table-column prop="phone" label="Số điện thoại" width="200"></el-table-column>
         </el-table>
       </el-main>
     </el-container>
@@ -35,7 +31,9 @@
 
 
 <script>
+import axios from "axios";
 import Menu from './Menu.vue';
+import { MessageBox } from 'element-ui';
 
 export default {
     name: 'department',
@@ -44,12 +42,51 @@ export default {
     },
     data () {
       return {
-
+        tableData: [],
+        searchValue: '',
       }
     },
+    mounted() {
+      this.getDepartments();
+    },
     methods: {
+      getDepartments() {
+        axios({
+          method: 'GET',
+          url: `http://localhost:8080/api/v1/departments`
+        }).then(
+          result => {
+            this.tableData = result.data.content;
+          },
+          error => {
+            console.error(error);
+          }
+        )
+      },
       handleDuplicate() {
-        
+        this.getDepartments();
+      },
+      searchDepartment() {
+        const self = this;
+        axios({
+          method: 'GET',
+          url: `http://localhost:8080/api/v1/departments/${this.searchValue}`
+        }).then(
+          result => {
+            let tableTmp = [];
+            tableTmp.push(result.data);
+            this.tableData = tableTmp;
+          },
+        ).catch(function (error) {
+          console.log(error.response.status);
+          
+          if (error.response && error.response.status === 404) {
+              MessageBox.alert('Phòng ban không tồn tại', 'Thông báo', {
+                confirmButtonText: 'Đóng'
+              });
+              self.tableData = [];
+            }
+        })
       },
     },
 }
