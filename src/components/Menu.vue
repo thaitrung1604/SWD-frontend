@@ -34,6 +34,7 @@
             <el-menu-item index="2-2" @click="goToCreateStore">Thêm mới cửa hàng</el-menu-item>
             <el-menu-item index="2-3" @click="goToCreateDepartment">Thêm mới phòng ban</el-menu-item>
             <el-menu-item index="2-4" @click="goToCreateSupplier">Thêm mới nhà cung cấp</el-menu-item>
+            <el-menu-item index="2-5" @click="goToCreateUser">Thêm mới người dùng</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="3" style="text-align: left">
@@ -68,7 +69,7 @@
             <el-menu-item index="5-2" @click="goToUpdateStore">Chỉnh sửa cửa hàng</el-menu-item>
             <el-menu-item index="5-3" @click="goToUpdateDepartment">Chỉnh sửa phòng ban</el-menu-item>
             <el-menu-item index="5-4" @click="goToUpdateSupplier">Chỉnh sửa nhà cung cấp</el-menu-item>
-            <el-menu-item index="5-5" @click="goToMinute">Thông tin người dùng</el-menu-item>
+            <el-menu-item index="5-5" @click="goToUpdateUser">Thông tin người dùng</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="6" style="text-align: left">
@@ -185,6 +186,16 @@
         goToUpdateAsset: function() {
           if (this.$route.name !== 'assetUpdate') {
             this.$router.push({name: 'assetUpdate'});
+          }
+        },
+        goToCreateUser: function() {
+          if (this.$route.name !== 'userCreation') {
+            this.$router.push({name: 'userCreation'});
+          }
+        },
+        goToUpdateUser: function() {
+          if (this.$route.name !== 'userUpdate') {
+            this.$router.push({name: 'userUpdate'});
           }
         },
 

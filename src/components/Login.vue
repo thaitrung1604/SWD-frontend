@@ -34,6 +34,30 @@
   </div>
 </template>
 
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyAE0d18m3O-KTKQzZxOk5pmpgsd3yv41q8",
+    authDomain: "assetmanagement-702ed.firebaseapp.com",
+    databaseURL: "https://assetmanagement-702ed.firebaseio.com",
+    projectId: "assetmanagement-702ed",
+    storageBucket: "assetmanagement-702ed.appspot.com",
+    messagingSenderId: "548865131065",
+    appId: "1:548865131065:web:74ad298b5fc6a2146c83e8",
+    measurementId: "G-3S4Y32E629"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
 <script>
 import axios from 'axios';
 import { MessageBox } from 'element-ui';

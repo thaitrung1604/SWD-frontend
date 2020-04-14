@@ -80,7 +80,7 @@
                 <el-col :span="6">
                     <div class="grid-content bg-purple">
                         <p>Mã phòng ban quản lý</p>
-                        <el-select v-model="selectedDepartment" disabled placeholder="Select">
+                        <el-select v-model="selectedDepartment" placeholder="Select">
                             <el-option
                             v-for="item in departmentList"
                             :key="item.id"
@@ -106,7 +106,7 @@
                 <el-col :span="6">
                     <div class="grid-content bg-purple">
                         <p>Trạng thái</p>
-                        <el-select v-model="selectedStatus" disabled placeholder="Select">
+                        <el-select v-model="selectedStatus" placeholder="Select">
                             <el-option
                             v-for="item in statusList"
                             :key="item.id"
@@ -224,8 +224,8 @@ export default {
     mounted() {
         // this.getAssetTypes();
         // this.getSuppliers();
-        // this.getStatus();
-        // this.getDepartments();
+        this.getStatus();
+        this.getDepartments();
         // // this.getStores();
         // this.getUsers();
     },

@@ -89,6 +89,16 @@ const routes = [
         name: 'assetUpdate', 
         component: () => import('./components/AssetUpdate.vue')
     },
+    {
+        path: '/userCreation',
+        name: 'userCreation', 
+        component: () => import('./components/UserCreation.vue')
+    },
+    {
+        path: '/userUpdate',
+        name: 'userUpdate', 
+        component: () => import('./components/UserUpdate.vue')
+    },
 ];
   
 const router = new VueRouter({
